@@ -1,5 +1,5 @@
 #include "includes/fractol.h"
-
+#include "stdlib.h"
 void    frctl_draw_ship(t_mlx *m)
 {
     pthread_t   *threads;
@@ -12,12 +12,13 @@ void    frctl_draw_ship(t_mlx *m)
     pthread_create(&(threads[1]), NULL, frctl_tread_ship, m);
     pthread_create(&(threads[2]), NULL, frctl_tread_ship, m);
     frctl_count_ship(m, m->f[0], -1, -1);
+    pthread_join(threads[2], NULL);
     pthread_join(threads[0], NULL);
     pthread_join(threads[1], NULL);
-    pthread_join(threads[2], NULL);
     mlx_put_image_to_window(m->mlx, m->win, m->img, 0, 0);
     frctl_create_menu_cs(m);
     mlx_destroy_image(m->mlx, m->img);
+    mlx_do_sync(m->mlx);
     free(threads);
 }
 
@@ -47,18 +48,15 @@ void    *frctl_count_ship(t_mlx *m, t_map f, int x, int y)
             f.nre = 0;
             f.nim = 0;
             f.sre = 0;
-            f.sim = 0;
             f.cre = (x - HLFW) / f.wzoom + m->xmove;
-            while ((f.sre + f.sim <= 4.0) && f.i < m->iters)
+            while ((f.nre * f.nre + f.nim * f.nim) <= 10.0 && f.i < m->iters)
             {
-                f.nim = (f.nre + f.nim) * (f.nre + f.nim) - f.sre - f.sim;
-                f.nim += f.cim;
-                f.nre = f.sre - f.sim + f.cre;
-                f.sre = f.nre * f.nre;
-                f.sim = f.nim * f.nim;
+                f.sre = (f.nre * f.nre) - (f.nim * f.nim) + f.cre;
+                f.nim = 2 * fabs(f.nre * f.nim) + f.cim;
+                f.nre = f.sre;
                 f.i++;
             }
-            if (f.i != m->iters && (f.c = m->c - f.i * 88777))
+            if (f.i < m->iters && (f.c = m->c + f.i * 65556))
                 frctl_im_draw(m, x * m->bpp / 8, y * m->sl, f.c);
         }
         x = -1;

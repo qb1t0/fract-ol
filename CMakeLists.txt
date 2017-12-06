@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(fractol)
 
 set(CMAKE_C_STANDARD 99)
-set(SOURCE_FILES fractol.c includes/fractol.h onaction.c menu.c mandelbrot.c julia.c burningship.c)
+set(SOURCE_FILES fractol.c includes/fractol.h onaction.c menu.c mandelbrot.c julia.c burningship.c circle.c)
 
 include_directories(include libft ${OpenGL_INCLUDE_DIR})
 find_package(OpenGL REQUIRED)

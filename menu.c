@@ -7,8 +7,7 @@
 **  + open fractal in new window.
 */
 
-void    frctl_create_menu_fr(t_mlx *m)
-{
+void    frctl_create_menu_fr(t_mlx *m) {
     mlx_string_put(m->mlx, m->win, 810, 340, 0xFFFFFF, "______________________");
     mlx_string_put(m->mlx, m->win, 845, 365, 0xFFFFFF, "Fractal's menu");
     mlx_string_put(m->mlx, m->win, 810, 380, 0xFFFFFF, "______________________");
@@ -20,6 +19,11 @@ void    frctl_create_menu_fr(t_mlx *m)
         mlx_string_put(m->mlx, m->win, 1020, 501, 0x32CD32, "+");
     else
         mlx_string_put(m->mlx, m->win, 1020, 501, 0xB22222, "-");
+    if (m->type == 2) {
+        mlx_string_put(m->mlx, m->win, 835, 540, 0xFFFFFF, "Modify Julia set:");
+        mlx_string_put(m->mlx, m->win, 815, 560, 0xFFFFFF, "mwheelleft/mwheelright");
+
+    }
 }
 
 /*

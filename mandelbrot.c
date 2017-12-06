@@ -18,6 +18,7 @@ void    frctl_draw_mandelbrot(t_mlx *m)
     mlx_put_image_to_window(m->mlx, m->win, m->img, 0, 0);
     frctl_create_menu_cs(m);
     free(threads);
+    mlx_do_sync(m->mlx);
     mlx_destroy_image(m->mlx, m->img);
 }
 
@@ -58,7 +59,7 @@ void    *frctl_count_mandelbrot(t_mlx *m, t_map f, int x, int y)
                 f.sim = f.nim * f.nim;
                 f.i++;
             }
-            if (f.i != m->iters && (f.c = m->c - f.i * 88777))
+            if (f.i < m->iters && (f.c = m->c + f.i * 4106))
                 frctl_im_draw(m, x * m->bpp / 8, y * m->sl, f.c);
         }
         x = -1;

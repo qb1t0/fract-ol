@@ -18,6 +18,7 @@ void    frctl_draw_julia(t_mlx *m)
     mlx_put_image_to_window(m->mlx, m->win, m->img, 0, 0);
     frctl_create_menu_cs(m);
     mlx_destroy_image(m->mlx, m->img);
+    mlx_do_sync(m->mlx);
     free(threads);
 }
 
@@ -39,26 +40,22 @@ void    *frctl_count_julia(t_mlx *m, t_map f, int x, int y)
 {
     f.hzoom = HLFH * m->zoom;
     f.wzoom = HLFW * m->zoom;
+    f.cim = 0.27017;
+    f.cre = m->julia;
     while (++y < f.ysize)
     {
-        f.cim = (y - HLFH) / f.hzoom + m->ymove;
         while (++x < f.xsize) {
             f.i = 0;
-            f.nre = 0;
-            f.nim = 0;
-            f.sre = 0;
-            f.sim = 0;
-            f.cre = (x - HLFW) / f.wzoom + m->xmove;
-            while ((f.sre + f.sim <= 4.0) && f.i < m->iters)
+            f.nre = (x - HLFW) / f.wzoom + m->xmove;
+            f.nim = (y - HLFH) / f.hzoom + m->ymove;
+            while ((f.nre * f.nre + f.nim *f.nim) <= 4.0 && f.i < m->iters)
             {
-                f.nim = (f.nre + f.nim) * (f.nre + f.nim) - f.sre - f.sim;
-                f.nim += f.cim;
-                f.nre = f.sre - f.sim + f.cre;
-                f.sre = f.nre * f.nre;
-                f.sim = f.nim * f.nim;
+                f.sre = (f.nre * f.nre) - (f.nim * f.nim) + f.cre;
+                f.nim = 2 * f.nre * f.nim + f.cim;
+                f.nre = f.sre;
                 f.i++;
             }
-            if (f.i != m->iters && (f.c = m->c - f.i * 88777))
+            if (f.i < m->iters && (f.c = m->c + f.i * 4419))
                 frctl_im_draw(m, x * m->bpp / 8, y * m->sl, f.c);
         }
         x = -1;

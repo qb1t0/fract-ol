@@ -65,18 +65,19 @@ typedef struct      s_mlx{
     int             mus;
     int			    sl;
     int             part; // index of 1/4 part of our input data
+    double          julia;
     /* Fractol variables */
     struct s_map    f[4];
 
     int             c;      //color variable
     float           zoom;   //zoom value
-    float		    xmove;  //move on x axis value
-    float		    ymove;  //move on y axis value
+    double		    xmove;  //move on x axis value
+    double		    ymove;  //move on y axis value
     short           iters;  //iteration
     short           type;   //fractal type
 }                   t_mlx;
 
-void    frctl_mouse_input(t_mlx *m, int x, int y);
+void    frctl_mouse_input(t_mlx *m, int x, int y, int *buf);
 int     frctl_onmouse(int button, int x, int y, t_mlx *m);
 int     frctl_onbutton(int button, t_mlx *m);
 

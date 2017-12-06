@@ -48,8 +48,17 @@ void    frctl_set_default(t_mlx *m)
     m->f[2].xsize = 400;
     m->f[3].xsize = 800;
     m->f[3].ysize = 800;
-    m->c = 0xF0F0F0;
-    m->xmove = m->type == -1 ? (float) -0.5 : 0;
+    m->c = 0xFF0000;
+    if (m->type == -1)
+        m->xmove = (float)-0.5;
+    else if (m->type == -3) {
+        m->xmove = (float) -0.55;
+        m->ymove = (float) -0.4;
+    }
+    else
+        m->xmove = 0;
+   // m->xmove = m->type == -1 ? (float) -0.5 : 0;
+    m->julia = m->type == -2 ? -0.72 : 0;
 }
 
 /*
