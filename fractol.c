@@ -1,8 +1,5 @@
 #include "includes/fractol.h"
 
-
-
-
 /*
 ** Setting colors(RGB) for each pixel in 4 bytes of f->im(char *)
 */
@@ -15,23 +12,9 @@ void	frctl_im_draw(t_mlx *f, int x, int y, int c)
 }
 
 /*
-** frctl_handle_error() handles fractol errors
-** switch (type) :
-**      0 : print usage
-**      1 : function call failed (on fd == 2)
+** Function frctl_set_default(t_mlx *m)
+**  -Sets default values to the variables
 */
-
-void    frctl_handle_error(int type)
-{
-    if (!type)
-    {
-        ft_printf("Usage: ./fractol <fractol name>\n\fAs <fractol name> "
-                          "u r available 2 use following agruments :"
-                          "\n\t-[mandelbrot];\n\t-[julia];\n\t-[burnship].\n");
-    }
-    exit(0);
-}
-
 
 void    frctl_set_default(t_mlx *m)
 {
@@ -57,7 +40,6 @@ void    frctl_set_default(t_mlx *m)
     }
     else
         m->xmove = 0;
-   // m->xmove = m->type == -1 ? (float) -0.5 : 0;
     m->julia = m->type == -2 ? -0.72 : 0;
 }
 
@@ -68,14 +50,20 @@ void    frctl_set_default(t_mlx *m)
 **        1 : mandelbrot;
 **        2 : julia;
 **        3 : burship;
-**  ToDo: Add more fractals here.
 */
 
 void    frctl_create_new(t_mlx *m)
 {
-    printf("%d\n", m->type);
     if (m->type < 0)
     {
+        system("killall afplay");
+        m->mus = 1;
+        if (m->type == -1)
+        system("afplay ../music/mandelbrot.mp3 &");
+        else if (m->type == -2)
+            system("afplay ../music/julia.mp3 &");
+        if (m->type == -3)
+            system("afplay ../music/burnship.mp3 &");
         frctl_set_default(m);
         m->type *= -1;
     }
@@ -100,7 +88,6 @@ void    frctl_create_window(int type)
 
     m.mlx = mlx_init();
     m.new = 0;
-    m.mus = 0;
     m.type = (short)type;
     m.win = mlx_new_window(m.mlx, WIDTH + 250, HEIGHT, "fract'ol, ysalata");
     frctl_create_new(&m);
@@ -114,7 +101,12 @@ void    frctl_create_window(int type)
 int main(int ac, char **av)
 {
     if (ac != 2 || !av[1])
-        frctl_handle_error(0);
+    {
+        ft_printf("Usage: ./fractol <fractol name>\n\fAs <fractol name> "
+                          "u r available 2 use following agruments :"
+                          "\n\t-[mandelbrot];\n\t-[julia];\n\t-[burnship].\n");
+        exit(0);
+    }
     if (!ft_strcmp(av[1], "mandelbrot"))
         frctl_create_window(-1);
     else if (!ft_strcmp(av[1], "julia"))
@@ -122,5 +114,7 @@ int main(int ac, char **av)
     else if (!ft_strcmp(av[1], "burnship"))
         frctl_create_window(-3);
     else
-        frctl_handle_error(0);
+        ft_printf("Usage: ./fractol <fractol name>\n\fAs <fractol name> "
+                          "u r available 2 use following agruments :"
+                          "\n\t-[mandelbrot];\n\t-[julia];\n\t-[burnship].\n");
 }

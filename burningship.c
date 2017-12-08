@@ -34,6 +34,7 @@ void    *frctl_tread_ship(void *arg)
         frctl_count_ship(m, m->f[m->part], 399, -1);
     else if (m->part == 2)
         frctl_count_ship(m, m->f[m->part], -1, 399);
+    return (NULL);
 }
 
 void    *frctl_count_ship(t_mlx *m, t_map f, int x, int y)
@@ -61,4 +62,5 @@ void    *frctl_count_ship(t_mlx *m, t_map f, int x, int y)
         }
         x = -1;
     }
+    return (NULL);
 }

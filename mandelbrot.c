@@ -34,34 +34,34 @@ void    *frctl_tread_mandelbrot(void *arg)
         frctl_count_mandelbrot(m, m->f[m->part], 399, -1);
     else if (m->part == 2)
         frctl_count_mandelbrot(m, m->f[m->part], -1, 399);
+    return (NULL);
 }
 
 void    *frctl_count_mandelbrot(t_mlx *m, t_map f, int x, int y)
 {
     f.hzoom = HLFH * m->zoom;
     f.wzoom = HLFW * m->zoom;
-    while (++y < f.ysize)
+    while (++y < f.ysize && (x = -1))
     {
         f.cim = (y - HLFH) / f.hzoom + m->ymove;
         while (++x < f.xsize) {
-            f.i = 0;
+            f.i = -1;
             f.nre = 0;
             f.nim = 0;
             f.sre = 0;
             f.sim = 0;
             f.cre = (x - HLFW) / f.wzoom + m->xmove;
-            while ((f.sre + f.sim <= 4.0) && f.i < m->iters)
+            while ((f.sre + f.sim <= 4.0) && ++f.i < m->iters)
             {
                 f.nim = (f.nre + f.nim) * (f.nre + f.nim) - f.sre - f.sim;
                 f.nim += f.cim;
                 f.nre = f.sre - f.sim + f.cre;
                 f.sre = f.nre * f.nre;
                 f.sim = f.nim * f.nim;
-                f.i++;
             }
             if (f.i < m->iters && (f.c = m->c + f.i * 4106))
                 frctl_im_draw(m, x * m->bpp / 8, y * m->sl, f.c);
         }
-        x = -1;
     }
+    return (NULL);
 }

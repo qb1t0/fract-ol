@@ -3,7 +3,7 @@
 void    frctl_play_music(int *a)
 {
     *a = *a ? 0 : 1;
-
+    system("sh ../music/pause.sh");
 }
 
 
@@ -22,49 +22,45 @@ int     frctl_onbutton(int button, t_mlx *m)
         m->zoom *= 1.1;
     else if (button == 78)
         m->zoom /= 1.1;
+    else if (button == 53)
+        exit(system("killall afplay"));
     frctl_create_new(m);
     return (1);
 }
 
-void    frctl_mouse_move(t_mlx *m, int b, int x, int y)
+void    frctl_mouse_move(t_mlx *m, int b, double x, double y)
 {
     double x1;
     double x2;
-    double y1;
-    double y2;
-
 
     if (b == 4)
     {
-        x1 = ((double)x - HLFW) / (HLFW * m->zoom);
-        x2 = ((double)x - HLFW) / (HLFW * m->zoom * 1.1);
-        y1 = ((double)y - HLFH) / (HLFH * m->zoom);
-        y2 = ((double)y - HLFH) / (HLFH * m->zoom * 1.1);
-        m->zoom *= 1.06;
+        x1 = (x - HLFW) / (HLFW * m->zoom);
+        x2 = (x - HLFW) / (HLFW * m->zoom * 1.1);
         m->xmove -= (x2 - x1);
-        m->ymove -= (y2 - y1);
+        x1 = (y - HLFH) / (HLFH * m->zoom);
+        x2 = (y - HLFH) / (HLFH * m->zoom * 1.1);
+        m->ymove -= (x2 - x1);
+        m->zoom *= 1.06;
     }
     else if (b == 5)
     {
-        x1 = ((double)x - HLFW) / (HLFW * m->zoom);
-        x2 = ((double)x - HLFW) / (HLFW * m->zoom / 1.1);
-        y1 = ((double)y - HLFH) / (HLFH * m->zoom);
-        y2 = ((double)y - HLFH) / (HLFH * m->zoom / 1.1);
-        m->zoom /= 1.06;
+        x1 = (x - HLFW) / (HLFW * m->zoom);
+        x2 = (x - HLFW) / (HLFW * m->zoom / 1.1);
         m->xmove -= (x2 - x1);
-        m->ymove -= (y2 - y1);
+        x1 = (y - HLFH) / (HLFH * m->zoom);
+        x2 = (y - HLFH) / (HLFH * m->zoom / 1.1);
+        m->ymove -= (x2 - x1);
+        m->zoom /= 1.06;
     }
-    else if (b == 6)
-      m->julia += 0.01;
-    else if (b == 7)
-      m->julia -= 0.01;
+    (b == 6) ? m->julia += 0.005 : 0;
+    (b == 7) ? m->julia -= 0.005 : 0;
 }
 
 void    frctl_mouse_input(t_mlx *m, int x, int y, int *buf)
 {
     if (x > 982 && x < 1006 && y > 297 && y < 311)
         frctl_play_music(&m->mus);
-        //m->mus = m->mus ? 0 : 1;
     if (x > 847 && y > 417)
     {
         if (x < 984 && y < 431)
@@ -96,7 +92,6 @@ int     frctl_onmouse(int b, int x, int y, t_mlx *m)
 
     mlx_clear_window(m->mlx, m->win);
     buf = m->type;
-    printf("%d %d %d\n", b, x, y);
     if (b == 1)
         frctl_mouse_input(m, x, y, &buf);
     else if ((b > 3 && b < 8))
