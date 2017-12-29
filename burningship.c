@@ -1,16 +1,30 @@
-#include "includes/fractol.h"
-#include "stdlib.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   burningship.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ysalata <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/12/09 17:56:36 by ysalata           #+#    #+#             */
+/*   Updated: 2017/12/09 17:56:39 by ysalata          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/fractol.h"
+
 void    frctl_draw_ship(t_mlx *m)
 {
     pthread_t   *threads;
+    t_mlx       a;
 
     m->part = -1;
     m->img = mlx_new_image(m->win, WIDTH, HEIGHT);
     m->im = mlx_get_data_addr(m->img, &m->bpp, &m->sl, &m->end);
+    a = *m;
     threads = (pthread_t*)malloc(3 * sizeof(pthread_t));
-    pthread_create(&(threads[0]), NULL, frctl_tread_ship, m);
-    pthread_create(&(threads[1]), NULL, frctl_tread_ship, m);
-    pthread_create(&(threads[2]), NULL, frctl_tread_ship, m);
+    pthread_create(&(threads[0]), NULL, frctl_tread_ship, &a);
+    pthread_create(&(threads[1]), NULL, frctl_tread_ship, &a);
+    pthread_create(&(threads[2]), NULL, frctl_tread_ship, &a);
     frctl_count_ship(m, m->f[0], -1, -1);
     pthread_join(threads[2], NULL);
     pthread_join(threads[0], NULL);
@@ -35,6 +49,7 @@ void    *frctl_tread_ship(void *arg)
     else if (m->part == 2)
         frctl_count_ship(m, m->f[m->part], -1, 399);
     return (NULL);
+
 }
 
 void    *frctl_count_ship(t_mlx *m, t_map f, int x, int y)

@@ -34,7 +34,8 @@ void    frctl_set_default(t_mlx *m)
     m->c = 0xFF0000;
     if (m->type == -1)
         m->xmove = (float)-0.5;
-    else if (m->type == -3) {
+    else if (m->type == -3)
+    {
         m->xmove = (float) -0.55;
         m->ymove = (float) -0.4;
     }
@@ -94,6 +95,7 @@ void    frctl_create_window(int type)
     mlx_mouse_hook(m.win, frctl_onmouse, &m);
     mlx_hook(m.win, 2, 5, frctl_onbutton, &m);
     mlx_loop(m.mlx);
+    system("killall afplay");
 }
 
 /* Guys, no reason 2 read it, here is all simple as fuck*/

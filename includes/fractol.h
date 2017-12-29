@@ -6,8 +6,16 @@
 # include "../libft/libft.h"
 # include "../libft/ft_printf/ft_printf.h"
 # import <OpenCL/Opencl.h>
-#include <stdio.h>
-#include <pthread.h>
+# include <stdio.h>
+# include <pthread.h>
+# define UNDERSCORE "______________________"
+# define ZOOMIN "zoom in:     mwheelup"
+# define ZOOMOUT "zoom out:    mwheeldown"
+# define MOVEX "move X-axis: left/right"
+# define MOVEY "move Y-axis: up/down"
+# define MWHEEL "mwheelleft/mwheelright"
+# define JULIA "Modify Julia set:"
+# define NEWWIND "Open in new window: [ ]"
 # define WIDTH 800
 # define HEIGHT 800
 # define HLFW 400
@@ -28,6 +36,8 @@
 **  int             xsize;  //I'm using it for 4-thread WIDTH divine
 **  int             ysize;  //I'm using it for 4-thread WIDTH divine
 */
+
+struct      s_mlx;
 
 typedef struct	    s_map{
     int             c;
